@@ -13,19 +13,18 @@ class Solution:
         选择：是否选当前元素
         dp的状态是选择元素的数量
         """
-        # 不满足最优子结构啊，首先做个排序
-        if m > n: # 则希望1少的在前面
-            strs = sorted(strs, key=lambda s: (len(s), s.count('1')))
-        else:
-            strs = sorted(strs, key=lambda s: (len(s), s.count('0')))
-        print(strs)
-
         m,n,k = len(strs), m, n
         dp = [[[0]*(k+1) for _ in range(n+1)] for _ in range(m+1)]
 
-        for i in range(1,m+1):
-            for j in range(1,n+1):
-                for q in range(1,k+1):
+        for i in range(m+1):
+            for j in range(n+1):
+                for q in range(k+1):
+                    if i == 0:
+                        dp[i][j][q] = 0
+                        continue
+                    if j == 0 and q == 0:
+                        dp[i][j][q] = 0
+                        continue
                     zero, one = self.get_zero_one(strs[i-1])
                     if j-zero < 0 or q-one < 0:
                         dp[i][j][q] = dp[i-1][j][q]
@@ -44,8 +43,6 @@ class Solution:
             elif ch == '1':
                 one += 1
         return zero, one
-
-
 
 
 # @lc code=end
