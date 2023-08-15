@@ -5,8 +5,6 @@
  */
 
 // @lc code=start
-
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -24,28 +22,26 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-        if(root==null)return root;
-        if(key==root.val){ //删除
+        if(root==null)return null;
+        //找到节点后，选取左子树最大值，或右子树最小值替换
+        if(key>root.val){
+            root.right = deleteNode(root.right, key);
+        }else if(key<root.val){
+            root.left = deleteNode(root.left, key);
+        }else{//找到了
             if(root.left==null)return root.right;
             if(root.right==null)return root.left;
-            //如果左右结点都有，可以从右子树选最小结点
-            TreeNode minNode = getMin(root.right);
-            //将用于替换的结点删除
+            TreeNode minNode = findMinNode(root.right);
             root.right = deleteNode(root.right, minNode.val);
             minNode.left = root.left;
             minNode.right = root.right;
-            //删除该结点
             return minNode;
-        }else if(key>root.val){
-            root.right = deleteNode(root.right, key);
-        }else{
-            root.left = deleteNode(root.left, key);
         }
         return root;
     }
-    public TreeNode getMin(TreeNode node){
-        while(node.left!=null)node=node.left;
-        return node;
+    TreeNode findMinNode(TreeNode root){
+        while(root!=null&&root.left!=null)root=root.left;
+        return root;
     }
 }
 // @lc code=end
