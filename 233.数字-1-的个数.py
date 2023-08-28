@@ -7,30 +7,20 @@
 # @lc code=start
 class Solution:
     def countDigitOne(self, n: int) -> int:
-        self.memx = {}
-        res = [int(x) for x in str(n)]
-        return self.dp(0, True, res)
+        self.s = str(n)
+        return self.dp(0, True, 0)
     
-    def dp(self, index, limit, num_list):
-        if (index,limit) in self.memx:
-            return self.memx[(index, limit)]
-        if index == len(num_list): # base case
-            return 0
-        
-        up = num_list[index] if limit else 9
-        ans = 0
+    @cache
+    def dp(self, index, limit, cnt1):
+        if index == len(self.s):
+            return cnt1
+        res = 0
+        up = int(self.s[index]) if limit else 9
         for i in range(up+1):
-            if i == 1:
-                if index == len(num_list) - 1:
-                    ans += 1
-                else:
-                    if limit and i == up:
-                        ans += int("".join(map(str, num_list[index+1:]))) + 1
-                    else:
-                        ans += 10**(len(num_list) - index - 1)
-            ans += self.dp(index+1, limit and i==up, num_list)
-        self.memx[(index,limit)] = ans
-        return ans
+            res += self.dp(index+1, limit and i==up, cnt1+(i==1))
+        return res
+
+
     
 # @lc code=end
 
