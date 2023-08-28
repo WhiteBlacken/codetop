@@ -7,33 +7,40 @@
 // @lc code=start
 class Solution {
     public String longestPalindrome(String s) {
-        //针对n个字母，每个做一次回文子串判断，取最大值
-        String res = s.substring(0, 1);
-        //奇数中心
-        for(int i=1;i<s.length()-1;i++){ //第一个和最后一个不用判断
-            int left= i-1,right = i + 1;
-            while(left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
-                left--;
-                right++;
+        String s1 = longestPalindromeOdd(s);
+        String s2 = longestPalindromeDouble(s);
+        return s1.length()>s2.length() ? s1:s2;
+    }
+
+    String longestPalindromeOdd(String s){
+        String max_res = "";
+        for(int i=0;i<s.length();i++){
+            int l=i-1,r=i+1;
+            while(l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
+                l--;
+                r++;
             }
-            if(right-left-1>res.length()){ //因为跳出范围了
-                res = s.substring(left+1, right);
-            }
+            if(r-l-1>max_res.length()){//两边分别越界1
+                max_res = s.substring(l+1, r);
+            } 
         }
-        //偶数中心
+        return max_res;
+    }
+
+    String longestPalindromeDouble(String s){
+        String max_res = "";
         for(int i=0;i<s.length()-1;i++){
             if(s.charAt(i)!=s.charAt(i+1))continue;
-            int left = i-1, right= i+2;
-            while(left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
-                left--;
-                right++;
+            int l=i-1,r=i+2;
+            while(l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
+                l--;
+                r++;
             }
-            if(right-left-1>res.length()){ //因为跳出范围了
-                res = s.substring(left+1, right);
+            if(r-l-1>max_res.length()){
+                max_res = s.substring(l+1, r);
             }
         }
-        return res;
-
+        return max_res;
     }
 }
 // @lc code=end
